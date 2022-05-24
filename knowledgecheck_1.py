@@ -10,5 +10,5 @@ fav_dict={
 }
 print('My favorite books are', fav_dict['books'])
 
-test_tuple = ['baking', 'traveling', 'skating']
+test_tuple = ('baking', 'traveling', 'skating')
 print('A hobby of mine includes', test_tuple[0])
