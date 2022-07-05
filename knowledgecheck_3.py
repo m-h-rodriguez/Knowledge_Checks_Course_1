@@ -12,29 +12,22 @@ df = os.path.join(path, 'SalaryData.csv')
 salary_df = pd.read_csv(df, encoding='cp1252')
 
 
-# salary_df['Employee_Name'].replace('', np.nan, inplace=True)
-# salary_df.dropna(subset=['Employee_Name'], inplace=True)
-
-# salary_df.drop(
-#     salary_df[salary_df['CalYear'] != 2022].index, inplace=True)
-
-
-def agg_2022_salary():
-    salary_df['Employee_Name'].replace('', np.nan, inplace=True)
-    salary_df.dropna(subset=['Employee_Name'], inplace=True)
-    salary_df.drop(salary_df[salary_df['CalYear'] != 2021].index, inplace=True)
-    salay_calc = salary_df.groupby(
-        salary_df['Department']).Annual_Rate.agg(['count', 'min', 'max', 'mean', 'sum']).rename(columns={'count': 'Employee_Count', 'min': 'Lowest_Salary', 'max': 'Highest_Salary', 'mean': 'Average_Salary', 'sum': 'Department_Total'})
+def agg_salary(year):
+    filterYear = salary_df["CalYear"].isin([year])
+    dataByYear = salary_df[filterYear]
+    salay_calc = dataByYear.groupby(
+        dataByYear['Department']).Annual_Rate.agg(['count', 'min', 'max', 'mean', 'sum']).rename(columns={'count': 'Employee_Count', 'min': 'Lowest_Salary', 'max': 'Highest_Salary', 'mean': 'Average_Salary', 'sum': 'Department_Total'})
 
     return print(salay_calc)
 
 
-agg_2022_salary()
+agg_salary(2018)
 
 
-def max_2021_salary(salary_df):
-    salary_df['Annual_Rate'] = salary_df['Annual_Rate'].astype(np.int64)
-    filterYear = salary_df["CalYear"].isin([2021])
+def max_salary(year):
+    salary_df['Annual_Rate'] = salary_df['Annual_Rate'].astype(
+        np.int64)
+    filterYear = salary_df["CalYear"].isin([year])
     filterRateMax = salary_df["Annual_Rate"].max()
     dataByYearAsc = salary_df[filterYear]
 
@@ -47,4 +40,5 @@ def max_2021_salary(salary_df):
     return dataByYearTop
 
 
-print('The highest paid employee of 2022 is: \n', max_2021_salary(salary_df))
+print('The highest paid employee of the selected year is: \n',
+      max_salary(2016))
