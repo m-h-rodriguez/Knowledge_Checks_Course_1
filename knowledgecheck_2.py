@@ -4,24 +4,23 @@ import datetime
 import os
 
 
-df = pd.read_csv(os.path.join(os.path.dirname(
-    __file__), 'assets', 'SalaryData'.csv))
+path = 'C:\\Users\miche\\OneDrive\\Desktop\\Code Louisville\\knowledge checks\\data_1_checks\\assets\\'
 
-# df = pd.read_csv(
-#     "C:\\Users\\miche\\OneDrive\\Desktop\\Code Louisville\\knowledge checks\\data_1_checks\\assets\\SalaryData.csv", encoding='unicode_escape')
+df = os.path.join(path, 'SalaryData.csv')
 
-print(df.head())
-print(df.tail())
+salary_df = pd.read_csv(df, encoding='cp1252')
+print(salary_df.head())
+print(salary_df.tail())
 
 
-def year(salary): return df['CalYear']
+def year(salary): return salary_df['CalYear']
 
 
 year(2020)
 
 
-dept = df['Department'].unique()
-salary = df.groupby(year, ['Department'])['Annual_Rate'].sum()
+dept = salary_df['Department'].unique()
+salary = salary_df.groupby(year, ['Department'])['Annual_Rate'].sum()
 
 
 plt.plot(dept, salary, 'o')
