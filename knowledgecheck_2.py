@@ -12,27 +12,21 @@ salary_df = pd.read_csv(df, encoding='cp1252')
 
 salary_df['Employee_Name'].replace('', np.nan, inplace=True)
 salary_df.dropna(subset=['Employee_Name'], inplace=True)
+salary_df.drop(salary_df[salary_df['CalYear'] != 2022].index, inplace=True)
 
+depts = salary_df['Department'].unique()
+salary_df['Annual_Rate'] = salary_df['Annual_Rate'].astype(float)
+salary = salary_df.groupby(['Department'])['Annual_Rate'].sum()
 
-def select_year(year):
-    filterYear = salary_df["CalYear"].isin([year])
-    dataByYear = salary_df[filterYear]
-    salary_calc = dataByYear.groupby(
-        dataByYear['Department']).Annual_Rate.sum()
-    return print(salary_calc)
+print(depts)
 
-
-dept = salary_df['Department'].unique()
-salary = select_year(2022).to_string()
-
-
-fig = plt.figure(figsize=(20, 5))
-plt.bar(dept, salary, color='blue', width=.2)
-
-plt.xlabel('Departments')
-plt.ylabel('Department Wage Budget')
-
-plt.title('Total Amount of Wages Paid Per Metro Department')
+plt.bar(depts, salary)
+plt.title('Louisville Metro Salary Budget By Department in 2022')
+plt.xlabel('Year')
+plt.ylabel('Salary Budget')
+plt.xticks(depts[::1], rotation="vertical")
+plt.gca().set_yticklabels(['${:,.0f}'.format(x)
+                           for x in plt.gca().get_yticks()])
 plt.show()
 
 
